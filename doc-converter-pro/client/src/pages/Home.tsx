@@ -80,6 +80,7 @@ function statusTone(status: JobStatus) {
 }
 
 export default function Home() {
+  const API_BASE = (import.meta.env.VITE_API_BASE as string) || '';
   const inputRef = useRef<HTMLInputElement>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
   const [sessionId, setSessionId] = useState('');
@@ -98,7 +99,7 @@ export default function Home() {
 
   const loadHistory = useCallback(async (id: string) => {
     try {
-      const response = await fetch(`/api/history?sessionId=${encodeURIComponent(id)}`, { cache: 'no-store' });
+      const response = await fetch(`${API_BASE}/api/history?sessionId=${encodeURIComponent(id)}`, { cache: 'no-store' });
       if (!response.ok) return;
       const result = await response.json();
       setHistory(result.history || []);
@@ -116,7 +117,7 @@ export default function Home() {
 
   const subscribeToJob = useCallback((job: Job, id: string) => {
     eventSourceRef.current?.close();
-    const stream = new EventSource(`/api/conversions/${job.id}/events?sessionId=${encodeURIComponent(id)}`);
+    const stream = new EventSource(`${API_BASE}/api/conversions/${job.id}/events?sessionId=${encodeURIComponent(id)}`);
     eventSourceRef.current = stream;
     stream.onmessage = (event) => {
       try {
@@ -169,7 +170,7 @@ export default function Home() {
       const body = new FormData();
       body.append('file', selectedFile);
       body.append('direction', direction);
-      const response = await fetch('/api/conversions', {
+      const response = await fetch(`${API_BASE}/api/conversions`, {
         method: 'POST',
         headers: { 'x-session-id': sessionId },
         body,
