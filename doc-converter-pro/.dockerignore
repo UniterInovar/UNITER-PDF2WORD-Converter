@@ -1,0 +1,13 @@
+node_modules
+dist
+dist/public
+.git
+.github
+venv
+__pycache__
+*.log
+*.pid
+tmp
+temp
+.env
+package-lock.json
