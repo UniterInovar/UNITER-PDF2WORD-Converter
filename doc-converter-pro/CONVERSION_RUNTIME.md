@@ -4,7 +4,7 @@ DocConverter Pro runs its conversion workers as child processes of the Express r
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `DOC_CONVERTER_MAX_FILE_BYTES` | `52428800` | Maximum upload size; the upload middleware and conversion service read the same value. |
+| `DOC_CONVERTER_MAX_FILE_BYTES` | `10737418240` | Maximum upload size (default 10 GiB); the upload middleware and conversion service read the same value. |
 | `DOC_CONVERTER_PYTHON` | `python3` | Python executable used for the PDF-to-Word worker. |
 | `DOC_CONVERTER_SOFFICE` | `soffice` | LibreOffice executable used for Word-to-PDF rendering. |
 | `DOC_CONVERTER_PROCESS_TIMEOUT_MS` | `300000` | Maximum time in milliseconds to allow an external conversion process before it is killed (default 5 minutes). |
