@@ -41,6 +41,7 @@ npm start
 Environment variables
 - `PORT` — preferred port (default `3000`).
 - `DOC_CONVERTER_MAX_FILE_BYTES` — max upload bytes (default `10737418240` = 10 GiB).
+ - `DOC_CONVERTER_MAX_FILE_BYTES` — max upload bytes (default `209715200` = 200 MB). Set lower limits for free hosting.
 - `DOC_CONVERTER_PYTHON` — Python executable (default `python3`).
 - `DOC_CONVERTER_SOFFICE` — LibreOffice executable (default `soffice`).
 - `DOC_CONVERTER_PROCESS_TIMEOUT_MS` — per-process timeout in ms (default `300000`).
@@ -85,3 +86,24 @@ Vercel (frontend) guidance
   4. Deploy — the frontend will call `${VITE_API_BASE}/api/...` for API requests.
 
 Note: The repository's client was updated to respect `VITE_API_BASE`. When empty, the client uses the current origin (same-origin server). When set in Vercel, API calls go to the backend URL.
+
+Render (backend) guidance
+- Render supports Docker-based web services and will run the backend persistently with an HTTPS public URL.
+
+Quick steps to deploy the backend on Render (Docker):
+1. Create a free account at https://render.com and connect your GitHub repo.
+2. In Render dashboard click "New" → "Web Service" and select this repository/branch.
+3. Set the Environment to `Docker` (Render will use the `Dockerfile` in the repo root).
+4. Service Port: `3000` (the app uses `process.env.PORT || 3000`).
+5. Add Environment Variables (Render dashboard → Environment) as needed:
+  - `DOC_CONVERTER_MAX_FILE_BYTES` (default `10737418240`)
+  - `DOC_CONVERTER_PROCESS_TIMEOUT_MS` (default `300000`)
+  - any secrets or API keys your integration requires
+6. Deploy — Render will build the Docker image and provide a stable HTTPS URL for your service.
+
+Notes and caveats:
+- The `Dockerfile` installs LibreOffice and Python packages required for conversions; Render's free plan can run this image but be mindful of build time and resource limits.
+- For large uploads (multi-GB) consider using signed direct uploads to object storage (S3-compatible) and handing off conversion jobs via background workers; Render has request size/time limits for web requests.
+- This repository includes a `render.yaml` manifest for Render's infrastructure-as-code if you prefer to create the service from the repo.
+
+If you want, I can prepare an optional GitHub Action that builds and pushes the image to GHCR and triggers a Render deploy from the registry.

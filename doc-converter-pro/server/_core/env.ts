@@ -8,8 +8,8 @@ export const ENV = {
   isProduction: process.env.NODE_ENV === "production",
   forgeApiUrl: process.env.BUILT_IN_FORGE_API_URL ?? "",
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
-  // Default to 10 GiB to support very large conversion jobs; override with DOC_CONVERTER_MAX_FILE_BYTES.
-  conversionMaxFileBytes: Number(process.env.DOC_CONVERTER_MAX_FILE_BYTES ?? 10 * 1024 * 1024 * 1024),
+  // Default to 200 MB for free-tier compatibility; override with DOC_CONVERTER_MAX_FILE_BYTES.
+  conversionMaxFileBytes: Number(process.env.DOC_CONVERTER_MAX_FILE_BYTES ?? 200 * 1024 * 1024),
   pythonExecutable: process.env.DOC_CONVERTER_PYTHON ?? "python3",
   libreOfficeExecutable: process.env.DOC_CONVERTER_SOFFICE ?? "soffice",
   // Maximum time (ms) to allow external conversion processes to run before force-killing them.

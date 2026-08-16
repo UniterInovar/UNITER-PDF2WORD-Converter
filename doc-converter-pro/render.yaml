@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: doc-converter-pro
+    env: docker
+    plan: starter
+    repo: .
+    branch: main
+    dockerfilePath: ./Dockerfile
+    serviceDetails:
+      autoDeploy: true
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DOC_CONVERTER_MAX_FILE_BYTES
+        value: "10737418240"
+      - key: DOC_CONVERTER_PROCESS_TIMEOUT_MS
+        value: "300000"
